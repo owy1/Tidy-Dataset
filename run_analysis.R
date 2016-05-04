@@ -16,8 +16,8 @@ subject_test <- read.table("~/Desktop/UCI HAR Dataset/test/subject_test.txt")
 subject_train <- read.table("~/Desktop/UCI HAR Dataset/train/subject_train.txt")
 
 #transpose attributes (561) to one row
-attr561temp <- read.table("~/Desktop/UCI HAR Dataset/features_561 attr.txt")
-attr561 <- attr561[,2]
+attr561temp <- read.table("~/Desktop/UCI HAR Dataset/features.txt")
+attr561 <- attr561temp[,2]
 attr561 <- t(attr561)
 attr561 <- c("subject","activity", as.character(attr561))
 
@@ -62,8 +62,9 @@ mergeFile_df
 #2        1 STANDING         0.2784188      -0.016410568        -0.1235202       -0.9982453
 #3        1 STANDING         0.2796531      -0.019467156        -0.1134617       -0.9953796
 
-meanstd <- mergeFile_df[, duplicated(colnames(mergeFile_df))]
-meanstd_temp <- select(meanstd, subject,activity,contains("mean"), contains("Mean"),contains("std"))
+meanstd <- mergeFile_df[, !duplicated(colnames(mergeFile_df))]
+#meanstd_temp <- select(meanstd, subject,activity,contains("mean"), contains("Mean"),contains("std"))
+meanstd_temp <- select(meanstd, subject, activity, grep("mean|std", colnames(meanstd), ignore.case=TRUE))
 meanstd_temp
 
 #print out of meanstd_temp
@@ -76,6 +77,6 @@ meanstd_temp
 #3        1 STANDING         0.2796531      -0.019467156        -0.1134617            0.9668781
 
 #write tidy data set with average of each variable for each activity and each subject (goal 5)
-subject_agg <- group_by(x,subject,activity)
+subject_agg <- group_by(meanstd_temp,subject,activity)
 temp <- summarise_each(subject_agg, funs(mean))
 write.csv(temp, file = "meanstd_avg.csv", row.names=FALSE)

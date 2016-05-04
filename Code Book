@@ -1,8 +1,67 @@
-Column_Subject: 30 subjects
-Column_Activity: 6 activities(walking, walking upstairs, walking downstairs, sitting, standing,laying)
-Column_:88 means and standard deviations of measurements 
-a tidy dataset with the average of each variables (88) for each activity and each subject is written to a csv file
-a snapshot of the output csv file as follow:
+This Codebook contains variables used in run_analysis.R script, specific protocols are commented in script
+
+1) unzip UCI HAR Dataset folder in Desktop
+
+2) save run_analysis.R in Desktop
+
+3) R packages used: data.table, dplyr
+
+3) read the dataset into eight variables:
+	•	file_test_x, the test wearable measurable
+	•	file_test_y, the test activity ID and labels
+	•	file_train_x, the train wearable measurable
+	•	file_train_y, the train activity ID and labels
+	•	subject_test, subject ID in test file
+	•	subject_train, subject ID in train file
+	•	attr561temp, 561 attributes (column)
+	•	attr561, 561 attributes (row)
+
+4) temporary variables for organizing dataset
+	•	temp
+	•	temp_file_test, activity and test wearable values combined
+	•	temp_file_train, activity and train wearable values combined
+	•	mergeFile, test and train dataset combined
+	•	mergeFile_df, put mergeFile in data frame 
+mergeFile_df
+Source: local data frame [10,299 x 563]
+
+   subject activity tBodyAcc-mean()-X tBodyAcc-mean()-Y tBodyAcc-mean()-Z tBodyAcc-std()-X
+     (int)    (chr)             (dbl)             (dbl)             (dbl)            (dbl)
+1        1 STANDING         0.2885845      -0.020294171        -0.1329051       -0.9952786
+2        1 STANDING         0.2784188      -0.016410568        -0.1235202       -0.9982453
+3        1 STANDING         0.2796531      -0.019467156        -0.1134617       -0.9953796
+4        1 STANDING         0.2791739      -0.026200646        -0.1232826       -0.9960915
+5        1 STANDING         0.2766288      -0.016569655        -0.1153619       -0.9981386
+6        1 STANDING         0.2771988      -0.010097850        -0.1051373       -0.9973350
+7        1 STANDING         0.2794539      -0.019640776        -0.1100221       -0.9969210
+8        1 STANDING         0.2774325      -0.030488303        -0.1253604       -0.9965593
+9        1 STANDING         0.2772934      -0.021750698        -0.1207508       -0.9973285
+10       1 STANDING         0.2805857      -0.009960298        -0.1060652       -0.9948034
+..     ...      ...               ...               ...               ...              ...
+
+	•	meanstd, meanstd_temp, selecting columns containing phrase “mean” and “std”, ignore case, ignore duplicates
+meanstd_temp
+Source: local data frame [10,299 x 88]
+
+   subject activity tBodyAcc-mean()-X tBodyAcc-mean()-Y tBodyAcc-mean()-Z tGravityAcc-mean()-X
+     (int)    (chr)             (dbl)             (dbl)             (dbl)                (dbl)
+1        1 STANDING         0.2885845      -0.020294171        -0.1329051            0.9633961
+2        1 STANDING         0.2784188      -0.016410568        -0.1235202            0.9665611
+3        1 STANDING         0.2796531      -0.019467156        -0.1134617            0.9668781
+4        1 STANDING         0.2791739      -0.026200646        -0.1232826            0.9676152
+5        1 STANDING         0.2766288      -0.016569655        -0.1153619            0.9682244
+6        1 STANDING         0.2771988      -0.010097850        -0.1051373            0.9679482
+7        1 STANDING         0.2794539      -0.019640776        -0.1100221            0.9679295
+8        1 STANDING         0.2774325      -0.030488303        -0.1253604            0.9684915
+9        1 STANDING         0.2772934      -0.021750698        -0.1207508            0.9684812
+10       1 STANDING         0.2805857      -0.009960298        -0.1060652            0.9684180
+..     ...      ...               ...               ...               ...                  ...
+
+	•	subject_agg, dataset ordered per tidy data principle: each wearables mean or std column is ordered per activity per subject
+
+5) summarize “subject_agg” dataset by writing the wearable variable mean of each activity per subject to desktop file called “meanstd_avg.csv” 
+
+a snapshot of “meanstd_avg.csv” is as follow:
 subject	activity	tBodyAcc-mean()-X	tBodyAcc-mean()-Y	tBodyAcc-mean()-Z	tGravityAcc-mean()-X	tGravityAcc-mean()-Y	tGravityAcc-mean()-Z	tBodyAccJerk-mean()-X	tBodyAccJerk-mean()-Y
 1	LAYING	0.221598244	-0.040513953	-0.113203554	-0.248881798	0.705549773	0.44581772	0.081086534	0.003838204
 1	SITTING	0.261237565	-0.001308288	-0.104544182	0.831509933	0.204411593	0.332043703	0.07748252	-0.000619103
